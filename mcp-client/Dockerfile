@@ -6,7 +6,7 @@ WORKDIR /app
 # Copy root and client package files
 COPY package*.json ./
 COPY mcp-client/package*.json ./mcp-client/
-COPY mcp-client/.env ./mcp-client/
+COPY mcp-client/.env.example ./mcp-client/.env
 
 # Install all dependencies
 RUN npm install
