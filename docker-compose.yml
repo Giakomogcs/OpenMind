@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: mcp-server/Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./mcp-server/.env
+    restart: unless-stopped
+
+  client:
+    build:
+      context: .
+      dockerfile: mcp-client/Dockerfile
+    ports:
+      - "3001:80"
+    restart: unless-stopped
+    depends_on:
+      - server
