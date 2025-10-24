@@ -89,4 +89,20 @@ A partir da raiz do projeto, você pode usar os seguintes scripts:
 
 ---
 
+### Debugging e Inspeção com MCP Inspector
+
+Este projeto está integrado com o Model Context Protocol, permitindo que você inspecione os recursos, ferramentas e prompts disponíveis em tempo real.
+
+1.  **Inicie a aplicação** usando um dos métodos acima (Docker ou Manualmente).
+
+2.  Em um novo terminal, execute o seguinte comando:
+
+    ```bash
+    npx @modelcontextprotocol/inspector
+    ```
+
+3.  O inspetor será aberto no seu navegador, conectado automaticamente ao `mcp-server` em execução. Você deverá ver a ferramenta `server_health_check` que registramos.
+
+---
+
 _Este README será atualizado à medida que novas funcionalidades forem adicionadas._
