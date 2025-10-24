@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { McpModule } from '@nestjs-mcp/server';
 
@@ -8,9 +8,6 @@ import { OrchestratorModule } from './orchestrator/modules/orchestrator.module';
 import { ProvisionerModule } from './provisioner/modules/provisioner.module';
 import { User } from './auth/entities/user.entity';
 import { Connection } from './connections/entities/connection.entity';
-import { OrchestratorController } from './orchestrator/controllers/orchestrator.controller';
-import { AuthService } from './auth/services/auth.service';
-import { ProvisionerService } from './provisioner/services/provisioner.service';
 
 @Module({
   imports: [
@@ -18,22 +15,25 @@ import { ProvisionerService } from './provisioner/services/provisioner.service';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT, 10) || 5432,
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DATABASE,
-      entities: [User, Connection],
-      synchronize: true, // Auto-create tables (for development)
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        url: configService.get<string>('DATABASE_URL'),
+        entities: [User, Connection],
+        synchronize: true, // Auto-create tables (for development)
+      }),
     }),
-    McpModule.forRoot(),
+    McpModule.forRoot({
+      name: 'mcp-server',
+      version: '0.0.1',
+    }),
     AuthModule,
     OrchestratorModule,
     ProvisionerModule,
   ],
-  controllers: [OrchestratorController],
-  providers: [AuthService, ProvisionerService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

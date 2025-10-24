@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
+import { OrchestratorController } from '../controllers/orchestrator.controller';
 
 @Module({
   providers: [],
-  controllers: [],
+  controllers: [OrchestratorController],
 })
 export class OrchestratorModule {}
